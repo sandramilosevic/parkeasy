@@ -10,9 +10,20 @@ class Reservation(models.Model):
     CANCELED = 'canceled'
 
     STATUS_CHOICE = [
-        (ACTIVE, 'active'),
-        (FINISHED, 'finished'),
-        (CANCELED, 'canceled')
+        (ACTIVE, 'Active'),
+        (FINISHED, 'Finished'),
+        (CANCELED, 'Canceled')
+    ]
+
+    # Period type
+    HOURLY = 'hourly'
+    DAILY = 'daily'
+    MONTHLY = 'monthly'
+
+    PERIOD_CHOICES = [
+        (HOURLY, 'Per Hour'),
+        (DAILY, 'Per Day'),
+        (MONTHLY, 'Per Month'),
     ]
 
     # --- Fields ---
@@ -20,6 +31,12 @@ class Reservation(models.Model):
         max_length=10,
         choices=STATUS_CHOICE,
         default=ACTIVE
+    )
+
+    period_type = models.CharField(
+        max_length=10,
+        choices=PERIOD_CHOICES,
+        default=HOURLY
     )
 
     reservation_user = models.ForeignKey(User, on_delete=models.CASCADE)
