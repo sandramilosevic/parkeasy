@@ -46,7 +46,8 @@ class Reservation(models.Model):
     date_end = models.DateTimeField()
     date_created = models.DateTimeField(auto_now_add=True)
 
-    full_price = models.DecimalField(max_digits=10, decimal_places=2)
+    full_price = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0)
 
     # --- Methods ---
     def __str__(self):

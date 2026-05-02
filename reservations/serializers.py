@@ -30,6 +30,9 @@ class ReservationSerializer(serializers.ModelSerializer):
         date_start = data['date_start']
         date_end = data['date_end']
 
+        if not date_start or not date_end:
+            return data
+
         # End time must be after start time
         if date_end <= date_start:
             raise serializers.ValidationError(
@@ -61,7 +64,7 @@ class ReservationSerializer(serializers.ModelSerializer):
                 numbers_of_hours
 
         elif period_type == Reservation.DAILY:
-            numbers_of_days = duration.days
+            numbers_of_days = duration.total_seconds() / 86400
             validated_data['full_price'] = parking.price_per_day * \
                 numbers_of_days
 
