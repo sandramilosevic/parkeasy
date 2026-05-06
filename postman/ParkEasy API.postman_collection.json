@@ -1,0 +1,795 @@
+{
+  "info": {
+    "_postman_id": "62f2c8b0-9cfa-4807-b35e-2349d9c59d7d",
+    "name": "ParkEasy API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54475051",
+    "_collection_link": "https://go.postman.co/collection/54475051-62f2c8b0-9cfa-4807-b35e-2349d9c59d7d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /auth/register - Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"testuser2\",\r\n    \"email\": \"test2@test.com\",\r\n    \"password\": \"test1234\",\r\n    \"user_type\": \"driver\",\r\n    \"phone_number\": \"061111234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/auth/users/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "auth",
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /auth/register - Register Owner",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"parking_owner\",\r\n    \"email\": \"parking_owner@test.com\",\r\n    \"password\": \"owner1234\",\r\n    \"user_type\": \"owner\",\r\n    \"phone_number\": \"0611111221\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/auth/users/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "auth",
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /auth/token - Login User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"testuser2\",\r\n    \"password\": \"test1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/auth/token/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "auth",
+                "token",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /auth/token - Login Owner",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"parking_owner\",\r\n    \"password\": \"owner1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/auth/token/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "auth",
+                "token",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /auth/token/refresh - Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3ODU5NjE1NiwiaWF0IjoxNzc3OTkxMzU2LCJqdGkiOiJmNWM4ODcxNzk3NDE0YjRiOTUzNDUzYzZkOTlmOTFlNSIsInVzZXJfaWQiOiI0In0.IBLrVhzhZpEmzqeW-B70l8rjoriLPdO3aENZPaSAH6Y\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/auth/token/refresh/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "auth",
+                "token",
+                "refresh",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Parkings",
+      "item": [
+        {
+          "name": "GET /parkings - Get All Parkings",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc3OTk0OTU2LCJpYXQiOjE3Nzc5OTEzNTYsImp0aSI6IjJkYmUwNGFkNzkzMDQxNGM4ODcwZjk0MDEwYjJkYjllIiwidXNlcl9pZCI6IjQifQ.p8PTeG6D2-f20SlN1KyAjLo683Jt7PMYPFR-C89vsA0",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"testuser\",\r\n    \"email\": \"test@test.com\",\r\n    \"password\": \"test1234\",\r\n    \"user_type\": \"driver\",\r\n    \"phone_number\": \"0611114567\"\r\n}"
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/parkings/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "parkings",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /parkings/{id} - Get Single Parking",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/parkings/1/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "parkings",
+                "1",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /parkings - Create Parking",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDA1MDU2LCJpYXQiOjE3NzgwMDE0NTYsImp0aSI6IjM0MGRlZWJmZjUzODRlY2ViOGVmZGVhYzUyNjQ5YzJkIiwidXNlcl9pZCI6IjUifQ.6Eb6jAFlfYwsDcWRDzl3ezr3Wfv1fR9hHFBXnPZlLmI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "    {\r\n        \"id\": 1,\r\n        \"title\": \"Garage Belgrade\",\r\n        \"price_per_hour\": \"1.00\",\r\n        \"price_per_day\": \"15.00\",\r\n        \"price_per_month\": \"60.00\",\r\n        \"address\": \"Address 512\",\r\n        \"city\": \"Belgrade\",\r\n        \"description\": \"Garage for rent\",\r\n        \"image\": \"\",\r\n        \"featured\": \"true\",\r\n        \"owner\": 5,\r\n        \"parking_type\": \"garage\",\r\n        \"distance\": \"very_far\"\r\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/parkings/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "parkings",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /parkings/{id} - Update Parking",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDA2MzE1LCJpYXQiOjE3NzgwMDI3MTUsImp0aSI6ImMzNDZlNDA2MGFmYjRiZDk4ZTU4YzY0YmQ4ZDdlYjQzIiwidXNlcl9pZCI6IjUifQ.OHHETZp5jEn7GlZvePyrHEtQJKrexZaAojws7UW6fwg",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"distance\": \"far\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/parkings/4/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "parkings",
+                "4",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /parkings/{id} - Delete Parking",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc3OTk0OTU2LCJpYXQiOjE3Nzc5OTEzNTYsImp0aSI6IjJkYmUwNGFkNzkzMDQxNGM4ODcwZjk0MDEwYjJkYjllIiwidXNlcl9pZCI6IjQifQ.p8PTeG6D2-f20SlN1KyAjLo683Jt7PMYPFR-C89vsA0",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"testuser\",\r\n    \"email\": \"test@test.com\",\r\n    \"password\": \"test1234\",\r\n    \"user_type\": \"driver\",\r\n    \"phone_number\": \"0611114567\"\r\n}"
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/parkings/2/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "parkings",
+                "2",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reservations",
+      "item": [
+        {
+          "name": "POST /reservations - Create Reservation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDc4NTcxLCJpYXQiOjE3NzgwNzQ5NzEsImp0aSI6IjA5YzFlMTU3NTdiYzQ2N2Q5NjQyZTRkMzEyYzMyMzI2IiwidXNlcl9pZCI6IjQifQ.BAI4KaPl28IsJ-PY6jaI1nWN5XhBMDwf3y57p5bmrUw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"reservation_status\": \"active\",\r\n    \"period_type\": \"hourly\",\r\n    \"reservation_user\": 1,\r\n    \"parking_reservation\": 1,\r\n    \"date_start\": \"2026-05-10T10:00:00\",\r\n    \"date_end\": \"2026-05-10T12:00:00\",\r\n    \"full_price\": \"2.00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reservations/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /reservations/{id} - Get Reservation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDc4NTcxLCJpYXQiOjE3NzgwNzQ5NzEsImp0aSI6IjA5YzFlMTU3NTdiYzQ2N2Q5NjQyZTRkMzEyYzMyMzI2IiwidXNlcl9pZCI6IjQifQ.BAI4KaPl28IsJ-PY6jaI1nWN5XhBMDwf3y57p5bmrUw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reservations/3/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "3",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /reservations/{id} - Delete Reservation",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDc4NTcxLCJpYXQiOjE3NzgwNzQ5NzEsImp0aSI6IjA5YzFlMTU3NTdiYzQ2N2Q5NjQyZTRkMzEyYzMyMzI2IiwidXNlcl9pZCI6IjQifQ.BAI4KaPl28IsJ-PY6jaI1nWN5XhBMDwf3y57p5bmrUw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reservations/1/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "1",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Security Tests",
+      "item": [
+        {
+          "name": "DELETE /parkings/{id} - Unauthorized Delete (403)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDc4NTcxLCJpYXQiOjE3NzgwNzQ5NzEsImp0aSI6IjA5YzFlMTU3NTdiYzQ2N2Q5NjQyZTRkMzEyYzMyMzI2IiwidXNlcl9pZCI6IjQifQ.BAI4KaPl28IsJ-PY6jaI1nWN5XhBMDwf3y57p5bmrUw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/parkings/4/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "parkings",
+                "4",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH /parkings/{id} - Unauthorized Patch (403)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDc4NTcxLCJpYXQiOjE3NzgwNzQ5NzEsImp0aSI6IjA5YzFlMTU3NTdiYzQ2N2Q5NjQyZTRkMzEyYzMyMzI2IiwidXNlcl9pZCI6IjQifQ.BAI4KaPl28IsJ-PY6jaI1nWN5XhBMDwf3y57p5bmrUw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"distance\":\"center\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/parkings/4/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "parkings",
+                "4",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /parkings - Driver Create Parking (403)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDc4NTcxLCJpYXQiOjE3NzgwNzQ5NzEsImp0aSI6IjA5YzFlMTU3NTdiYzQ2N2Q5NjQyZTRkMzEyYzMyMzI2IiwidXNlcl9pZCI6IjQifQ.BAI4KaPl28IsJ-PY6jaI1nWN5XhBMDwf3y57p5bmrUw",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Parking Belgrade\",\r\n    \"price_per_hour\": \"1.00\",\r\n    \"price_per_day\": \"12.00\",\r\n    \"price_per_month\": \"55.00\",\r\n    \"address\": \"Address 5512\",\r\n    \"city\": \"Belgrade\",\r\n    \"description\": \"Parking for rent\",\r\n    \"image\": \"\",\r\n    \"featured\": false,\r\n    \"parking_type\": \"open_lot\",\r\n    \"distance\": \"center\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/parkings/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "parkings",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /reservations/{id} - Other User Reservation (404)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDgxMjIyLCJpYXQiOjE3NzgwNzc2MjIsImp0aSI6ImQ1NzQwYjc2NGFhOTQyNjJhZjgyOWQ5OWE2Y2RkMmQ1IiwidXNlcl9pZCI6IjYifQ.q47lcl1yGcB8Q7dpRJbH1no2l5CHmQgeocvAciZNCVA",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"period_type\": \"daily\",\r\n}"
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reservations/3/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "3",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /users/{id} - Driver View Other Profile (404)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDgxMjIyLCJpYXQiOjE3NzgwNzc2MjIsImp0aSI6ImQ1NzQwYjc2NGFhOTQyNjJhZjgyOWQ5OWE2Y2RkMmQ1IiwidXNlcl9pZCI6IjYifQ.q47lcl1yGcB8Q7dpRJbH1no2l5CHmQgeocvAciZNCVA",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"period_type\": \"daily\",\r\n}"
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/auth/users/5/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "auth",
+                "users",
+                "5",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /users - User get all users (403)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDgxMjIyLCJpYXQiOjE3NzgwNzc2MjIsImp0aSI6ImQ1NzQwYjc2NGFhOTQyNjJhZjgyOWQ5OWE2Y2RkMmQ1IiwidXNlcl9pZCI6IjYifQ.q47lcl1yGcB8Q7dpRJbH1no2l5CHmQgeocvAciZNCVA",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"period_type\": \"daily\",\r\n}"
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/auth/users/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "auth",
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH  /reservations/{id} - Changing other User Reservation (404)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MDgxMjIyLCJpYXQiOjE3NzgwNzc2MjIsImp0aSI6ImQ1NzQwYjc2NGFhOTQyNjJhZjgyOWQ5OWE2Y2RkMmQ1IiwidXNlcl9pZCI6IjYifQ.q47lcl1yGcB8Q7dpRJbH1no2l5CHmQgeocvAciZNCVA",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"period_type\": \"daily\",\r\n}"
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reservations/3/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "reservations",
+                "3",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
