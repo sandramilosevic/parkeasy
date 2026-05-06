@@ -18,9 +18,12 @@ class ParkingPermission(BasePermission):
         # Allow read-onlu access for unauthenticated users
         if request.method in SAFE_METHODS:
             return True
-        # Onlu authenticated users can write
+        # Only authenticated users can write
         if not request.user.is_authenticated:
             return False
+        # Only owner can create parking
+        if view.action == 'create':
+            return request.user.user_type == 'owner'
         return True
 
     def has_object_permission(self, request, view, obj):

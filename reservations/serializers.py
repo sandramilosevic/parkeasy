@@ -3,6 +3,7 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import Reservation
 from parkings.models import Parking
+from decimal import Decimal
 
 
 class ReservationSerializer(serializers.ModelSerializer):
@@ -58,20 +59,18 @@ class ReservationSerializer(serializers.ModelSerializer):
         duration = date_end - date_start
 
         if period_type == Reservation.HOURLY:
-            # Convert seconds to hours
             numbers_of_hours = duration.total_seconds() / 3600
             validated_data['full_price'] = parking.price_per_hour * \
-                numbers_of_hours
+                Decimal(str(numbers_of_hours))
 
         elif period_type == Reservation.DAILY:
             numbers_of_days = duration.total_seconds() / 86400
             validated_data['full_price'] = parking.price_per_day * \
-                numbers_of_days
+                Decimal(str(numbers_of_days))
 
         elif period_type == Reservation.MONTHLY:
-            # Approximately 30 days per month
             numbers_of_months = duration.days / 30
             validated_data['full_price'] = parking.price_per_month * \
-                numbers_of_months
+                Decimal(str(numbers_of_months))
 
         return super().create(validated_data)

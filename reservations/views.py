@@ -23,7 +23,7 @@ class ReservationPermission(BasePermission):
         return True
 
     def has_object_permission(self, request, view, obj):
-        # Allow read-onlu access for authenticated users
+        # Allow read-only access for authenticated users
         if request.method in SAFE_METHODS:
             return True
         # Only the user who made the reservation can update or delete it
