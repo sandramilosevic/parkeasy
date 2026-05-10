@@ -40,9 +40,17 @@ class ParkingViewSet(viewsets.ModelViewSet):
     Supports list, create, retrieve, update and delete operations
     """
     serializer_class = ParkingSerializer
-    queryset = Parking.objects.all()
     permission_classes = [ParkingPermission]
+
+    queryset = Parking.objects.none()
+
+    filterset_fields = ['city', 'parking_type', 'distance']
+    search_fields = ['title', 'city']
+    ordering_fields = ['price_per_hour', 'price_per_day', 'price_per_month']
 
     def perform_create(self, serializer):
         # Automatically set owner from JWT token
         serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        return Parking.objects.select_related('owner')

@@ -37,8 +37,8 @@ class ReservationViewSet(viewsets.ModelViewSet):
     """
 
     pagination_class = None
+    queryset = Reservation.objects.none()
     serializer_class = ReservationSerializer
-    queryset = Reservation.objects.all()
     permission_classes = [ReservationPermission]
 
     def perform_create(self, serializer):
@@ -46,5 +46,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
         serializer.save(reservation_user=self.request.user)
 
     def get_queryset(self):
+        reservations = Reservation.objects.select_related(
+            'reservation_user', 'parking_reservation')
         # Users can only see their own reservations
-        return Reservation.objects.filter(reservation_user=self.request.user)
+        return reservations.filter(reservation_user=self.request.user)
