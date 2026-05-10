@@ -39,6 +39,7 @@ class UserViewSet(viewsets.ModelViewSet):
     ViewSet for managing users
     Supports registation, profile view, update and delete
     """
+    pagination_class = None
     queryset = User.objects.all()
     permission_classes = [UserPermission]
 

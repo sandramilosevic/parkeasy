@@ -35,6 +35,8 @@ class ReservationViewSet(viewsets.ModelViewSet):
     ViewSet for managing reservations
     Supports list, create, retrieve, update and delete operations
     """
+
+    pagination_class = None
     serializer_class = ReservationSerializer
     queryset = Reservation.objects.all()
     permission_classes = [ReservationPermission]
