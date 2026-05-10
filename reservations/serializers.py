@@ -4,6 +4,7 @@ from datetime import timedelta
 from .models import Reservation
 from parkings.models import Parking
 from decimal import Decimal
+from django.db import transaction
 
 
 class ReservationSerializer(serializers.ModelSerializer):
@@ -27,7 +28,6 @@ class ReservationSerializer(serializers.ModelSerializer):
     # validate is called automatically before saving to check if data is correct
 
     def validate(self, data):
-
         date_start = data['date_start']
         date_end = data['date_end']
 
@@ -43,34 +43,53 @@ class ReservationSerializer(serializers.ModelSerializer):
         if date_end - date_start < timedelta(hours=1):
             raise serializers.ValidationError(
                 'Reservation must be at least 1 hour.')
+
+        # Check if parking is already reserved in the requested time period
+        conflict_check = Reservation.objects.filter(
+            parking_reservation=data['parking_reservation'],
+            date_start__lt=date_end,
+            date_end__gt=date_start,
+        )
+
+        if conflict_check.exists():
+            raise serializers.ValidationError(
+                'This parking is already reserved for the selected time period.')
+
         return data
 
     # create is called when user sends POST request to create a reservation
+
     def create(self, validated_data):
-
         parking = validated_data['parking_reservation']
-
         date_start = validated_data['date_start']
         date_end = validated_data['date_end']
-
         period_type = validated_data['period_type']
 
+        with transaction.atomic():
+            existing = Reservation.objects.select_for_update().filter(
+                parking_reservation=parking,
+                date_start__lt=date_end,
+                date_end__gt=date_start,
+            )
+            if existing.exists():
+                raise serializers.ValidationError(
+                    'This parking is already reserved for the selected time period.')
+
         # Calculate total duration of reservation
-        duration = date_end - date_start
+            duration = date_end - date_start
+            if period_type == Reservation.HOURLY:
+                numbers_of_hours = duration.total_seconds() / 3600
+                validated_data['full_price'] = parking.price_per_hour * \
+                    Decimal(str(numbers_of_hours))
 
-        if period_type == Reservation.HOURLY:
-            numbers_of_hours = duration.total_seconds() / 3600
-            validated_data['full_price'] = parking.price_per_hour * \
-                Decimal(str(numbers_of_hours))
+            elif period_type == Reservation.DAILY:
+                numbers_of_days = duration.total_seconds() / 86400
+                validated_data['full_price'] = parking.price_per_day * \
+                    Decimal(str(numbers_of_days))
 
-        elif period_type == Reservation.DAILY:
-            numbers_of_days = duration.total_seconds() / 86400
-            validated_data['full_price'] = parking.price_per_day * \
-                Decimal(str(numbers_of_days))
+            elif period_type == Reservation.MONTHLY:
+                numbers_of_months = duration.days / 30
+                validated_data['full_price'] = parking.price_per_month * \
+                    Decimal(str(numbers_of_months))
 
-        elif period_type == Reservation.MONTHLY:
-            numbers_of_months = duration.days / 30
-            validated_data['full_price'] = parking.price_per_month * \
-                Decimal(str(numbers_of_months))
-
-        return super().create(validated_data)
+            return super().create(validated_data)
