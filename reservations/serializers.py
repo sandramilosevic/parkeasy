@@ -5,6 +5,9 @@ from .models import Reservation
 from parkings.models import Parking
 from decimal import Decimal
 from django.db import transaction
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ReservationSerializer(serializers.ModelSerializer):
@@ -52,9 +55,9 @@ class ReservationSerializer(serializers.ModelSerializer):
         )
 
         if conflict_check.exists():
+            logger.warning(f'Conflict detected for parking {data['parking_reservation']}')
             raise serializers.ValidationError(
                 'This parking is already reserved for the selected time period.')
-
         return data
 
     # create is called when user sends POST request to create a reservation
@@ -92,4 +95,5 @@ class ReservationSerializer(serializers.ModelSerializer):
                 validated_data['full_price'] = parking.price_per_month * \
                     Decimal(str(numbers_of_months))
 
+            logger.info(f'Reservation created for parking {parking}')
             return super().create(validated_data)

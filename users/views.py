@@ -3,6 +3,9 @@ from .models import User
 from .serializers import UserSerialized, RegisterSerializer
 from rest_framework import viewsets
 from rest_framework.permissions import SAFE_METHODS, BasePermission
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class UserPermission(BasePermission):
@@ -56,3 +59,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return RegisterSerializer
         # Use UserSerialized for all other actions (excludes password)
         return UserSerialized
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        logger.info(f'New user registred {user.email}')

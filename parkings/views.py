@@ -3,6 +3,9 @@ from .models import Parking
 from .serializers import ParkingSerializer
 from rest_framework.permissions import BasePermission, SAFE_METHODS, IsAuthenticated
 from rest_framework import viewsets
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ParkingPermission(BasePermission):
@@ -51,6 +54,7 @@ class ParkingViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Automatically set owner from JWT token
         serializer.save(owner=self.request.user)
+        logger.info(f'Parking created by {self.request.user}')
 
     def get_queryset(self):
         return Parking.objects.select_related('owner')
