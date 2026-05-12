@@ -58,7 +58,7 @@ Owners can list their parking spots, drivers can search and reserve them.
 
 1. Clone the repository
    \`\`\`bash
-   git clone https://github.com/your-username/parkeasy.git
+   git clone https://github.com/sandramilosevic/parkeasy.git
    cd parkeasy
    \`\`\`
 
