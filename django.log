@@ -1,0 +1,10 @@
+Bad Request: /api/auth/users/
+"POST /api/auth/users/ HTTP/1.1" 400 101
+Bad Request: /api/auth/users/
+"POST /api/auth/users/ HTTP/1.1" 400 101
+Bad Request: /api/reservations/
+"POST /api/reservations/ HTTP/1.1" 400 102
+Bad Request: /api/reservations/
+"POST /api/reservations/ HTTP/1.1" 400 130
+Bad Request: /api/reservations/
+"POST /api/reservations/ HTTP/1.1" 400 130

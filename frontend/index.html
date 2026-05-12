@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkEasy — Find Parking in Seconds</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Nav -->
+    <nav>
+        <a href="index.html" class="logo">ParkEasy</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html">My Parking</a></li>
+        </ul>
+        <div class="nav-buttons" id="nav-buttons"></div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Find Parking in Seconds</h1>
+        <p>Rent or offer private parking spots and garages</p>
+    </section>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <div>
+            <label>City</label>
+            <select id="search-city">
+                <option value="">All cities</option>
+            </select>
+        </div>
+        <div>
+            <label>Parking type</label>
+            <select id="search-type">
+                <option value="">All types</option>
+                <option value="open_lot">Open lot</option>
+                <option value="garage">Garage</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div>
+            <label>Distance from center</label>
+            <select id="search-distance">
+                <option value="">All distances</option>
+                <option value="center">In center</option>
+                <option value="near">Up to 500m</option>
+                <option value="far">Up to 1km</option>
+                <option value="very_far">Over 1km</option>
+            </select>
+        </div>
+        <div>
+            <label>Sort by price</label>
+            <select id="search-ordering">
+                <option value="price_per_hour">Lowest first</option>
+                <option value="-price_per_hour">Highest first</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" onclick="searchParkings()">Search Parking</button>
+    </div>
+
+    <!-- Parking list -->
+    <div class="section">
+        <div class="section-header">
+            <h2>Available Parking Spots</h2>
+            <span class="count-badge" id="count-badge"></span>
+        </div>
+        <div id="parking-list" class="cards">
+            <div class="loading-row">
+                <div class="spinner"></div> Loading parking spots…
+            </div>
+        </div>
+        <div class="pagination" id="pagination" style="display:none">
+            <button class="btn btn-outline" id="btn-prev" onclick="changePage(-1)" style="display:none">←
+                Previous</button>
+            <span class="page-info" id="page-info"></span>
+            <button class="btn btn-outline" id="btn-next" onclick="changePage(1)" style="display:none">Next →</button>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="modal-login">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button class="modal-close" onclick="closeModal('modal-login')">×</button>
+            </div>
+            <div id="login-error" class="alert alert-error"></div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="login-username" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="login-password" placeholder="Enter your password"
+                    onkeydown="if(event.key==='Enter') login()">
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px"
+                onclick="login()">Login</button>
+            <p style="text-align:center;margin-top:16px;font-size:14px;color:var(--text-muted)">
+                Don't have an account?
+                <a href="#" style="color:var(--blue);font-weight:600"
+                    onclick="closeModal('modal-login');openModal('modal-register')">Register</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal-overlay" id="modal-register">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Create Account</h2>
+                <button class="modal-close" onclick="closeModal('modal-register')">×</button>
+            </div>
+            <div id="register-error" class="alert alert-error"></div>
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="register-username" placeholder="username">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="register-email" placeholder="you@example.com">
+                </div>
+            </div>
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" id="register-phone" placeholder="+381...">
+                </div>
+                <div class="form-group">
+                    <label>Account type</label>
+                    <select id="register-type">
+                        <option value="driver">Driver</option>
+                        <option value="owner">Parking owner</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="register-password" placeholder="Choose a strong password">
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px"
+                onclick="register()">Create Account</button>
+            <p style="text-align:center;margin-top:16px;font-size:14px;color:var(--text-muted)">
+                Already have an account?
+                <a href="#" style="color:var(--blue);font-weight:600"
+                    onclick="closeModal('modal-register');openModal('modal-login')">Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Reserve Modal -->
+    <div class="modal-overlay" id="modal-reserve">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Reserve Parking</h2>
+                <button class="modal-close" onclick="closeModal('modal-reserve')">×</button>
+            </div>
+            <div id="reserve-error" class="alert alert-error"></div>
+            <div id="reserve-success" class="alert alert-success"></div>
+            <input type="hidden" id="reserve-parking-id">
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label>Start time</label>
+                    <input type="datetime-local" id="reserve-start">
+                </div>
+                <div class="form-group">
+                    <label>End time</label>
+                    <input type="datetime-local" id="reserve-end">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Period type</label>
+                <select id="reserve-period">
+                    <option value="hourly">Per hour</option>
+                    <option value="daily">Per day</option>
+                    <option value="monthly">Per month</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px"
+                onclick="createReservation()">Confirm Reservation</button>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        let currentPage = 1;
+        let nextPage = null;
+        let prevPage = null;
+        let lastParams = {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNavButtons();
+            loadParkings();
+            loadCities();
+        });
+
+        function renderNavButtons() {
+            const nav = document.getElementById('nav-buttons');
+            if (isLoggedIn()) {
+                nav.innerHTML = `
+            <a href="dashboard.html" class="btn btn-outline">My Parking</a>
+            <button class="btn btn-primary" onclick="logout()">Logout</button>
+        `;
+            } else {
+                nav.innerHTML = `
+            <button class="btn btn-outline" onclick="openModal('modal-login')">Login</button>
+            <button class="btn btn-primary" onclick="openModal('modal-register')">Register</button>
+        `;
+            }
+        }
+
+        function logout() {
+            removeTokens();
+            window.location.reload();
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // Login — POST /api/auth/token/
+        async function login() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errorEl = document.getElementById('login-error');
+            errorEl.style.display = 'none';
+
+            const response = await apiLogin(username, password);
+            const data = await response.json();
+
+            if (response.ok) {
+                setTokens(data.access, data.refresh);
+                closeModal('modal-login');
+                window.location.reload();
+            } else {
+                errorEl.style.display = 'block';
+                errorEl.textContent = 'Invalid username or password.';
+            }
+        }
+
+        // Register — POST /api/auth/users/
+        async function register() {
+            const errorEl = document.getElementById('register-error');
+            errorEl.style.display = 'none';
+
+            const data = {
+                username: document.getElementById('register-username').value.trim(),
+                email: document.getElementById('register-email').value.trim(),
+                phone_number: document.getElementById('register-phone').value.trim(),
+                password: document.getElementById('register-password').value,
+                user_type: document.getElementById('register-type').value,
+            };
+
+            const response = await apiRegister(data);
+            const result = await response.json();
+
+            if (response.ok) {
+                closeModal('modal-register');
+                openModal('modal-login');
+            } else {
+                errorEl.style.display = 'block';
+                // Show first validation error from backend
+                const firstError = Object.values(result)[0];
+                errorEl.textContent = Array.isArray(firstError) ? firstError[0] : JSON.stringify(result);
+            }
+        }
+
+        // Load parkings — GET /api/parkings/?city=&parking_type=&distance=&ordering=&page=
+        async function loadParkings(params = {}) {
+            lastParams = params;
+            params.page = currentPage;
+
+            const list = document.getElementById('parking-list');
+            list.innerHTML = '<div class="loading-row"><div class="spinner"></div> Loading…</div>';
+
+            const response = await apiGetParkings(params);
+            const data = await response.json();
+
+            nextPage = data.next;
+            prevPage = data.previous;
+
+            // Pagination
+            const pagination = document.getElementById('pagination');
+            const btnNext = document.getElementById('btn-next');
+            const btnPrev = document.getElementById('btn-prev');
+            const pageInfo = document.getElementById('page-info');
+
+            btnNext.style.display = nextPage ? 'inline-flex' : 'none';
+            btnPrev.style.display = prevPage ? 'inline-flex' : 'none';
+            pagination.style.display = (nextPage || prevPage) ? 'flex' : 'none';
+
+            if (data.count !== undefined) {
+                document.getElementById('count-badge').textContent = `${data.count} spot${data.count !== 1 ? 's' : ''} found`;
+                const totalPages = Math.ceil(data.count / 3);
+                pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            }
+
+            renderParkings(data.results);
+        }
+
+        function renderParkings(parkings) {
+            const list = document.getElementById('parking-list');
+
+            if (!parkings || parkings.length === 0) {
+                list.innerHTML = `
+            <div class="empty-state" style="grid-column:1/-1">
+                <div class="empty-icon">🅿️</div>
+                <p>No parking spots found. Try adjusting your filters.</p>
+            </div>`;
+                return;
+            }
+
+            list.innerHTML = parkings.map(p => {
+                const isFeatured = p.featured;
+                return `
+        <div class="card ${isFeatured ? 'featured' : ''}">
+            <div class="card-image">
+                ${p.image
+                        ? `<img src="${p.image}" alt="${p.title}" onerror="this.parentElement.innerHTML='<div class=card-image-placeholder>🅿️</div>'">`
+                        : `<div class="card-image-placeholder">🅿️</div>`
+                    }
+                ${isFeatured ? '<span class="featured-ribbon">⭐ Featured</span>' : ''}
+            </div>
+            <div class="card-body">
+                <span class="card-type-badge">${formatType(p.parking_type)}</span>
+                <h3>${p.title}</h3>
+                <div class="card-meta">${formatDistance(p.distance)} · ${p.city}</div>
+                <div class="card-meta">${p.address}</div>
+                <div class="price-row">
+                    <span class="price">$${parseFloat(p.price_per_hour).toFixed(2)}</span>
+                    <span class="price-label">/ hour</span>
+                </div>
+                <button class="btn btn-primary btn-reserve" onclick="openReserve(${p.id})">Reserve</button>
+            </div>
+        </div>`;
+            }).join('');
+        }
+
+        async function loadCities() {
+            const allCities = new Set();
+            let page = 1;
+
+            // Paginate through all cities (PAGE_SIZE=3 on backend)
+            while (true) {
+                const response = await apiGetParkings({ page });
+                const data = await response.json();
+                if (!data.results) break;
+                data.results.forEach(p => allCities.add(p.city));
+                if (!data.next) break;
+                page++;
+            }
+
+            const select = document.getElementById('search-city');
+            [...allCities].sort().forEach(city => {
+                const opt = document.createElement('option');
+                opt.value = city;
+                opt.textContent = city;
+                select.appendChild(opt);
+            });
+        }
+
+        function searchParkings() {
+            currentPage = 1;
+            const params = {};
+
+            const city = document.getElementById('search-city').value;
+            const type = document.getElementById('search-type').value;
+            const distance = document.getElementById('search-distance').value;
+            const ordering = document.getElementById('search-ordering').value;
+
+            if (city) params.city = city;
+            if (type) params.parking_type = type;
+            if (distance) params.distance = distance;
+            if (ordering) params.ordering = ordering;
+
+            loadParkings(params);
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            loadParkings(lastParams);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Reserve — requires driver account
+        function openReserve(parkingId) {
+            if (!isLoggedIn()) {
+                openModal('modal-login');
+                return;
+            }
+            document.getElementById('reserve-parking-id').value = parkingId;
+            document.getElementById('reserve-error').style.display = 'none';
+            document.getElementById('reserve-success').style.display = 'none';
+            openModal('modal-reserve');
+        }
+
+        // POST /api/reservations/  { parking_reservation, date_start, date_end, period_type }
+        async function createReservation() {
+            const errorEl = document.getElementById('reserve-error');
+            const successEl = document.getElementById('reserve-success');
+            errorEl.style.display = 'none';
+            successEl.style.display = 'none';
+
+            const data = {
+                parking_reservation: parseInt(document.getElementById('reserve-parking-id').value),
+                date_start: document.getElementById('reserve-start').value,
+                date_end: document.getElementById('reserve-end').value,
+                period_type: document.getElementById('reserve-period').value,
+            };
+
+            const response = await apiCreateReservation(data);
+            const result = await response.json();
+
+            if (response.ok) {
+                successEl.style.display = 'block';
+                successEl.textContent = 'Reservation created successfully!';
+            } else {
+                errorEl.style.display = 'block';
+                // Backend wraps errors in { message: { non_field_errors: [...] } }
+                const msg = result.message?.non_field_errors?.[0]
+                    || result.message
+                    || Object.values(result)[0]?.[0]
+                    || 'An error occurred.';
+                errorEl.textContent = typeof msg === 'string' ? msg : JSON.stringify(msg);
+            }
+        }
+
+        // Helpers
+        function formatType(type) {
+            return { open_lot: 'Open lot', garage: 'Garage', other: 'Other' }[type] || type;
+        }
+
+        function formatDistance(d) {
+            return { center: 'In center', near: 'Up to 500m', far: 'Up to 1km', very_far: 'Over 1km' }[d] || d;
+        }
+    </script>
+</body>
+
+</html>

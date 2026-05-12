@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkEasy - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <a href="index.html" class="logo">ParkEasy</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html">My Parking</a></li>
+        </ul>
+        <div class="nav-buttons" id="nav-buttons"></div>
+    </nav>
+
+    <div class="section" style="margin-top: 40px">
+
+        <div id="driver-section" style="display:none">
+            <h2>My Reservations</h2>
+            <div id="reservations-list" style="margin-top: 20px"></div>
+        </div>
+
+        <div id="owner-section" style="display:none">
+            <h2>My Parking Spots</h2>
+            <div class="cards" id="owner-parkings" style="margin-top: 20px"></div>
+
+            <h2 style="margin-top: 40px">Add New Parking Spot</h2>
+            <div
+                style="background: var(--white); border-radius: 12px; padding: 24px; margin-top: 20px; border: 1px solid var(--border); max-width: 600px">
+                <div id="parking-error" class="alert alert-error" style="display:none"></div>
+                <div id="parking-success" class="alert alert-success" style="display:none"></div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="parking-title" placeholder="e.g. Garage in center">
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" id="parking-city" placeholder="e.g. Belgrade">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="parking-address" placeholder="e.g. Knez Mihailova 10">
+                </div>
+                <div class="form-group">
+                    <label>Parking type</label>
+                    <select id="parking-type">
+                        <option value="open_lot">Open lot</option>
+                        <option value="garage">Garage</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Distance from center</label>
+                    <select id="parking-distance">
+                        <option value="center">In center</option>
+                        <option value="near">Up to 500m</option>
+                        <option value="far">Up to 1km</option>
+                        <option value="very_far">Over 1km</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Price per hour</label>
+                    <input type="number" id="parking-price-hour" placeholder="e.g. $2">
+                </div>
+                <div class="form-group">
+                    <label>Price per day</label>
+                    <input type="number" id="parking-price-day" placeholder="e.g. $12">
+                </div>
+                <div class="form-group">
+                    <label>Price per month</label>
+                    <input type="number" id="parking-price-month" placeholder="e.g. $40">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="parking-description" rows="3" placeholder="Describe the parking spot..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="text" id="parking-image" placeholder="https://example.com/image.jpg">
+                </div>
+                <button class="btn btn-primary" style="width:100%" onclick="createParking()">Add Parking Spot</button>
+            </div>
+        </div>
+
+        <div id="not-logged-section" style="display:none; text-align:center; padding: 60px 0">
+            <h2>You are not logged in</h2>
+            <p style="color: var(--text-light); margin-top: 8px">Please login to see your dashboard</p>
+            <a href="index.html" class="btn btn-primary" style="display:inline-block; margin-top: 20px">Go to Home</a>
+        </div>
+
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+
+</body>
+
+</html>

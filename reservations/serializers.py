@@ -55,7 +55,8 @@ class ReservationSerializer(serializers.ModelSerializer):
         )
 
         if conflict_check.exists():
-            logger.warning(f'Conflict detected for parking {data['parking_reservation']}')
+            logger.warning(
+                f'Conflict detected for parking {data["parking_reservation"]}')
             raise serializers.ValidationError(
                 'This parking is already reserved for the selected time period.')
         return data

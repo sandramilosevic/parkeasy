@@ -4,6 +4,9 @@ from .serializers import UserSerialized, RegisterSerializer
 from rest_framework import viewsets
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 import logging
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 logger = logging.getLogger(__name__)
 
@@ -63,3 +66,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         user = serializer.save()
         logger.info(f'New user registred {user.email}')
+
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def me(self, request):
+        serializer = UserSerialized(request.user)
+        return Response(serializer.data)
